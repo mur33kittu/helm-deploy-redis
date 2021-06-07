@@ -30,7 +30,7 @@ echo "attach to pod"
 kubectl port-forward --namespace my-namespace svc/redis-master 9736:9736
 
 echo "attach to pod to connect by redis-client to verify the connection"
-kubectl run redis-client --rm --tty -i --restart='Never' --image docker.io/bitnami/docker.io/bitnami/redis:6.2.4-debian-10-r0 -- bash
+kubectl run redis-client --rm --tty -i --restart='Never' --image docker.io/bitnami/redis:6.2.4-debian-10-r0 -- bash
 
 
 echo "create a redis-client shell to test the connection"

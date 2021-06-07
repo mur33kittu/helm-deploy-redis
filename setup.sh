@@ -27,12 +27,14 @@ kubectl get all --namespace $NAMESPACE
 echo "attach to pod"
  kubectl run --namespace bi-customer-accessauthz redis-client --restart='Never'  --env REDIS_PASSWORD=$REDIS_PASSWORD  --image docker.io/bitnami/redis:6.2.4-debian-10-r0 --command -- sleep infinity
 
- 
-# kubectl run redis-client --rm --tty -i --restart='Never' --image docker.io/bitnami/redis:6.0.1-debian-10-r1 -- bash
+kubectl port-forward --namespace bi-customer-accessauthz svc/redis-master 9736:9736
+
+echo "attach to pod to connect by redis-client to verify the connection"
+kubectl run redis-client --rm --tty -i --restart='Never' --image docker.io/bitnami/redis:6.0.1-debian-10-r1 -- bash
 
 
-
-# kubectl exec --tty -i redis-client --namespace $NAMESPACE -- bash
+echo "create a redis-client shell to test the connection"
+kubectl exec --tty -i redis-client --namespace $NAMESPACE -- bash
 
 # redis-cli -h redis-master -a $REDIS_PASSWORD ping
 # redis-cli -h redis-replicas -a $REDIS_PASSWORD ping

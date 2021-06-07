@@ -1,5 +1,5 @@
 echo "Starting"
-NAMESPACE=bi-customer-accessauthz
+NAMESPACE=my-namespace
 # https://raw.githubusercontent.com/bitnami/charts/master/bitnami/redis/values.yaml
 # grep -o '^[^#]*' values-production.yaml | grep "\S" > values-prod.yaml
 # echo "deleting pods from $NAMESPACE"
@@ -25,9 +25,9 @@ echo $REDIS_PASSWORD
 kubectl get all --namespace $NAMESPACE
 
 echo "attach to pod"
- kubectl run --namespace bi-customer-accessauthz redis-client --restart='Never'  --env REDIS_PASSWORD=$REDIS_PASSWORD  --image docker.io/bitnami/redis:6.2.4-debian-10-r0 --command -- sleep infinity
+ kubectl run --namespace my-namespace redis-client --restart='Never'  --env REDIS_PASSWORD=$REDIS_PASSWORD  --image docker.io/bitnami/redis:6.2.4-debian-10-r0 --command -- sleep infinity
 
-kubectl port-forward --namespace bi-customer-accessauthz svc/redis-master 9736:9736
+kubectl port-forward --namespace my-namespace svc/redis-master 9736:9736
 
 echo "attach to pod to connect by redis-client to verify the connection"
 kubectl run redis-client --rm --tty -i --restart='Never' --image docker.io/bitnami/redis:6.0.1-debian-10-r1 -- bash
@@ -39,8 +39,8 @@ kubectl exec --tty -i redis-client --namespace $NAMESPACE -- bash
 # redis-cli -h redis-master -a $REDIS_PASSWORD ping
 # redis-cli -h redis-replicas -a $REDIS_PASSWORD ping
 
-#  redis-master.bi-customer-accessauthz.svc.cluster.local for read/write operations (port 6379)
-#     redis-replicas.bi-customer-accessauthz.svc.cluster.local for read-only operations (port 6379)
+#  redis-master.my-namespace.svc.cluster.local for read/write operations (port 6379)
+#     redis-replicas.my-namespace.svc.cluster.local for read-only operations (port 6379)
 
-#  redis-master.bi-customer-accessauthz.svc.cluster.local for read/write operations (port 6379)
-#     redis-replicas.bi-customer-accessauthz.svc.cluster.local for read-only operations (port 6379)
+#  redis-master.my-namespace.svc.cluster.local for read/write operations (port 6379)
+#     redis-replicas.my-namespace.svc.cluster.local for read-only operations (port 6379)
